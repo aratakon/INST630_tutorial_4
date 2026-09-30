@@ -36,8 +36,10 @@ const btnYes       = document.querySelector('#btn-yes');
 const btnNo        = document.querySelector('#btn-no');
 
 btnYes.disabled = true;
-// const confirmation = ;
-// const regret       = ;
+const confirmation = document.querySelector('#confirmation');
+const regret       = document.querySelector('#regret') ;
+const confirmedTotal       = document.querySelector('#confirmedTotal') ;
+
 
 
 // ── 3. HELPERS: small functions that do one thing ───────────
@@ -49,6 +51,7 @@ const getName = () => {
   const raw = nameInput.value.trim();
   return raw || 'Someone';
   // What does || do here? If raw is an empty string (falsy), return 'Someone'.
+  // it's the OR operator so if there is no name then add someone otherwise return the name 
 };
 
 // getGuests() returns the guest count as a NUMBER.
@@ -79,18 +82,22 @@ btnYes.addEventListener('click', () => {
   // YOUR CODE HERE
   if (isGoing === false){
     isGoing = true;
+    
   } 
    if (isNotGoing === true){
     isNotGoing = false;
   } 
+  
   console.log(isGoing)
   console.log(isNotGoing)
   btnYes.classList.add('active');
   btnNo.classList.remove('active');
   guestField.classList.remove('hidden');
   confirmation.classList.remove('hidden');
+  confirmedTotal.classList.remove('hidden');
+
   regret.classList.add('hidden');
-  updateConfirmation()
+  updateConfirmation();
 
 });
 
@@ -111,9 +118,13 @@ btnNo.addEventListener('click', () => {
   btnNo.classList.add('active');
   guestField.classList.add('hidden');
   confirmation.classList.add('hidden');
+  // confirmedTotal.classList.add('hidden');
+
   regret.classList.remove('hidden');
   regret.textContent = `${getName()} can't make it. Next time!`; 
+  confirmedTotal.textContent = `No guests confirmed yet.`; 
 
+  // updateConfirmation();
 
   // console.log(isGoing)
   // console.log(isNotGoing)
@@ -137,12 +148,13 @@ btnNo.addEventListener('click', () => {
 
 const updateConfirmation = () => {
   const guests = Number(getGuests()); 
+  const total = guests + 1
   // console.log("why" + guests)
-  const numGuest = {
-    0 : "flying solo.",
-    1 : "bringing 1 guest.", 
-    2 : "bringing 3 guests."
-  }
+  // const numGuest = {
+  //   0 : "flying solo.",
+  //   1 : "bringing 1 guest.", 
+  //   2 : "bringing 3 guests."
+  // }
   text1 = ``; 
 
   if (guests === 0){
@@ -151,12 +163,16 @@ const updateConfirmation = () => {
   else if (guests === 1){
     text1 = `is bringing ${guests} guest.`; 
   }
-   else{
+  else{
     text1 = `is bringing ${guests} guests.`; 
   }
   confirmation.textContent = `${getName()} is coming — ${text1}`; 
 
-
+  if (isGoing) {
+    confirmedTotal.textContent = `Total ${total} guests confirmed.`
+  } else {
+    confirmedTotal.textContent = `No guests confirmed yet.`
+  }
   // YOUR CODE HERE: build guestLine based on guests value
 
 
@@ -177,8 +193,10 @@ const updateConfirmation = () => {
 nameInput.addEventListener('input', () => {
     if (nameInput.value.trim() === ''){
     btnYes.disabled = true; 
+    
   } else{
     btnYes.disabled = false;
+
   }
 
   if (isGoing === true && isNotGoing === false){
@@ -207,7 +225,7 @@ guestInput.addEventListener('input', () => {
     
   }
   else{
-    console.log("nah")
+    // console.log("nah")
   }
 
 
